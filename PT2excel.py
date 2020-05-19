@@ -10,13 +10,14 @@ api_base = "https://api.passivetotal.org"
 # User defines the domain they want to get PT data for
 print("Welcome to PT2excel! NOTE: Each execution uses ~10 API calls")
 target_domain = input("Enter the target domain:")
-print(f"Creating an excel spreadsheet for " + target_domain)
+print(f"Creating an excel spreadsheet for " + target_domain + " ...")
 
 # Creates excel spreadsheet
 workbook_name = target_domain + ".xlsx"
 workbook = xlsxwriter.Workbook(f"{workbook_name}")
-SUBDOMAINS_wkst = workbook.add_worksheet("Subdomains")
-row = 0
+#worksheet_header_format = workbook.add_Format({"bold": True, "font_size": 16})
+#column_header_format = workbook.add_format({"bold": True, "font_size": 12, "bg_color": "#808080", "border": 1})
+row = 2
 column = 0
 
 # Gotta figure out how to do this with a loop.
@@ -25,7 +26,6 @@ column = 0
 #         (PT_sources[i]) = workbook.add_worksheet()
 #         return (PT_sources[i])
 # excel_setup()  
-
 
 # Sets up call to PT API
 def PT_get(path, query):
@@ -42,6 +42,8 @@ def PT_get(path, query):
 
 # GET Subdomains
 subdomains_results = PT_get("/v2/enrichment/subdomains", target_domain)
+SUBDOMAINS_wkst = workbook.add_worksheet("Subdomains")
+SUBDOMAINS_wkst.write("A1", "Subdomains)
 for subdomains in subdomains_results["subdomains"]:
     # print(f"Found subdomain: {subdomains}" + "." + target_domain)
     SUBDOMAINS_wkst.write(row, column, subdomains)
